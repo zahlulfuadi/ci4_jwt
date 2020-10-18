@@ -2,9 +2,10 @@
 
 namespace App\Controllers;
 
-use App\Model\Auth_Model;
+use App\Models\Auth_Model;
+use CodeIgniter\RESTful\ResourceController;
 
-class Auth extends BaseController
+class Auth extends ResourceController
 {
     public function __construct()
     {
@@ -21,27 +22,29 @@ class Auth extends BaseController
         // generate password to hash
         $password_hash = password_hash($password, PASSWORD_BCRYPT);
         // mengelompokkan data dalam bentuk array
-        $dataRregister = [
+        $dataRegister = [
             'first_name'   => $firstName,
             'last_name'    => $lastName,
             'email'        => $email,
-            'password'     => $password
+            'password'     => $password_hash
         ];
         // insert data to table users
-        $register = $this->auth->register($dataRregister);
-        // jika hasil true 
+        $register = $this->auth->register($dataRegister);
+         
         if($register){
+            // jika hasil true
             $output = [
                 'status' => 200,
                 'message' => 'Berhasil melakukan register'
             ];
-            return $this->respond($output, 200)
+            return $this->respond($output, 200);
         } else {
+            // jika hasil false
             $output = [
                 'status' => 401,
                 'message' => 'Gagal melakukan register'
             ];
-            return $this->respond($output, 401)
+            return $this->respond($output, 401);
         }
 	}
 
